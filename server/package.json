@@ -1,0 +1,19 @@
+{
+  "name": "freelancing-platform-server",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "ejs": "^6.0.1",
+    "express": "^4.19.2",
+    "express-session": "^1.19.0",
+    "firebase-admin": "^14.0.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0"
+  }
+}

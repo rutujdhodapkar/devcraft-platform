@@ -1,0 +1,203 @@
+<%- include('partials/head') %>
+
+<%- include('partials/navbar') %>
+
+<%# ─── Hero Section ──────────────────────────────────────────────── %>
+<header class="section-padding hero-section" style="border-bottom: 2px solid #000; background-color: #fff; padding: 6rem 0 5rem;">
+  <div class="container">
+    <div style="max-width: 950px; margin: 0 auto; text-align: center;">
+      <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
+        <span class="badge-sharp" style="font-size: 0.85rem; font-weight: 800; padding: 0.35rem 0.85rem;">100% Free Program</span>
+        <span class="badge-sharp" style="font-size: 0.85rem; font-weight: 800; padding: 0.35rem 0.85rem; background-color: #000; color: #fff;">Industry Certified</span>
+        <span class="badge-sharp" style="font-size: 0.85rem; font-weight: 800; padding: 0.35rem 0.85rem;">Self-Paced Learning</span>
+      </div>
+
+      <h1 style="font-size: clamp(2.5rem, 6vw, 4.2rem); margin-bottom: 1.5rem; line-height: 1.05; font-weight: 900; text-transform: uppercase; letter-spacing: -1px;">
+        Kickstart Your Developer Career with Virtual Internships.
+      </h1>
+
+      <p style="font-size: clamp(1.05rem, 2vw, 1.25rem); margin-bottom: 2.5rem; max-width: 750px; margin-left: auto; margin-right: auto; color: #555; line-height: 1.6;">
+        Gain hands-on software engineering experience, build real production-grade code, and receive verified completion credentials. Self-paced, industry-aligned, and 100% virtual.
+      </p>
+
+      <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; font-size: 1rem; font-weight: 700;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: #34A853; font-size: 1.3rem;">✓</span> Free Offer Letter</div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: #34A853; font-size: 1.3rem;">✓</span> Verified Certificate</div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: #34A853; font-size: 1.3rem;">✓</span> Real Projects</div>
+      </div>
+
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 4rem;">
+        <a href="/auth" class="btn-sharp" style="padding: 1rem 2.5rem; font-size: 1rem; font-weight: bold; text-decoration: none;">Start Your Internship</a>
+        <a href="#domains" class="btn-sharp-outline" style="padding: 1rem 2.5rem; font-size: 1rem; font-weight: bold; text-decoration: none;">Explore Domains</a>
+      </div>
+
+      <div style="border-top: 2px dashed #e5e5e5; padding-top: 2.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+        <div><div style="font-size: 2.8rem; font-weight: 900; color: #000; margin-bottom: 0.25rem;">10,000+</div><div style="font-size: 0.9rem; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 1px;">Active Learners</div></div>
+        <div><div style="font-size: 2.8rem; font-weight: 900; color: #000; margin-bottom: 0.25rem;">7,000+</div><div style="font-size: 0.9rem; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 1px;">Certificates Issued</div></div>
+        <div><div style="font-size: 2.8rem; font-weight: 900; color: #000; margin-bottom: 0.25rem;">100%</div><div style="font-size: 0.9rem; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 1px;">Free &amp; Open Access</div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<%# ─── Career Paths ──────────────────────────────────────────────── %>
+<section id="domains" class="section-padding" style="background-color: #fff; border-bottom: 2px solid #000; padding: 5rem 0;">
+  <div class="container">
+    <div class="section-heading" style="text-align: center; margin-bottom: 3rem;">
+      <span class="badge-sharp" style="margin-bottom: 1rem;">AVAILABLE DOMAINS</span>
+      <h2 style="font-size: 2.5rem; font-weight: 900; text-transform: uppercase;">Explore Career Paths</h2>
+      <p style="color: #555; max-width: 600px; margin: 0.5rem auto 0;">Select a learning domain, enroll instantly, and start building software engineering projects to earn your credentials.</p>
+    </div>
+
+    <% if (careerPaths && careerPaths.length > 0) { %>
+      <div class="career-paths-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem;">
+        <% careerPaths.forEach(function(path) { %>
+          <div class="card-sharp card-interactive" style="display: flex; flex-direction: column; justify-content: space-between; padding: 2.25rem; border: 2px solid #000; box-shadow: 4px 4px 0 #000; background-color: #fff; position: relative;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                <span class="badge-sharp" style="background-color: #000; color: #fff; font-size: 0.8rem;"><%= path.duration || '4 Weeks' %></span>
+                <span style="font-size: 0.8rem; font-weight: bold; color: #555;">100% Free</span>
+              </div>
+              <h3 style="font-size: 1.4rem; font-weight: 800; text-transform: uppercase; margin-bottom: 1rem;"><%= path.title %></h3>
+              <p style="font-size: 0.88rem; color: #555; line-height: 1.6; margin-bottom: 1.5rem;"><%= path.description %></p>
+              <hr style="border: none; border-top: 2px solid #e5e5e5; margin-bottom: 1.5rem;" />
+              
+              <% if (path.features && path.features.length > 0) { %>
+                <div style="margin-bottom: 1.5rem;">
+                  <h4 style="font-size: 0.8rem; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 0.75rem;">What you will learn:</h4>
+                  <ul style="list-style: none; padding: 0; margin: 0;">
+                    <% path.features.forEach(function(feat) { %>
+                      <li style="display: flex; gap: 0.5rem; font-size: 0.83rem; color: #555; margin-bottom: 0.4rem; align-items: flex-start;"><span style="color: #000; font-weight: bold;">■</span> <%= feat %></li>
+                    <% }); %>
+                  </ul>
+                </div>
+              <% } %>
+
+              <% if (path.projects && path.projects.length > 0) { %>
+                <div style="margin-bottom: 2rem;">
+                  <h4 style="font-size: 0.8rem; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 0.75rem;">Hands-on Projects:</h4>
+                  <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+                    <% path.projects.forEach(function(proj) { %>
+                      <span class="badge-sharp" style="background-color: #f5f5f5; color: #333; font-size: 0.72rem; border: 1px solid #ccc; padding: 0.2rem 0.5rem;"><%= typeof proj === 'object' && proj !== null ? (proj.title || proj.name || 'Task') : proj %></span>
+                    <% }); %>
+                  </div>
+                </div>
+              <% } %>
+            </div>
+            
+            <form action="/api/enroll" method="POST">
+              <input type="hidden" name="domainId" value="<%= path.id %>" />
+              <input type="hidden" name="title" value="<%= path.title %>" />
+              <input type="hidden" name="duration" value="<%= path.duration || '4 Weeks' %>" />
+              <input type="hidden" name="projects" value='<%= JSON.stringify(path.projects || []) %>' />
+              <button type="submit" class="btn-sharp" style="width: 100%; padding: 0.8rem; font-weight: bold; text-transform: uppercase;">Apply Now</button>
+            </form>
+          </div>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <p style="text-align: center; font-style: italic; color: #555;">No domains configured yet.</p>
+    <% } %>
+  </div>
+</section>
+
+<%# ─── How It Works ──────────────────────────────────────────────── %>
+<section id="how-it-works" class="section-padding" style="background-color: #fafafa; border-bottom: 2px solid #000; padding: 5rem 0;">
+  <div class="container">
+    <div class="section-heading" style="text-align: center; margin-bottom: 4rem;">
+      <span class="badge-sharp" style="margin-bottom: 1rem;">PROCESS WORKFLOW</span>
+      <h2 style="font-size: 2.5rem; font-weight: 900; text-transform: uppercase;">How It Works</h2>
+      <p style="color: #555; max-width: 600px; margin: 0.5rem auto 0;">Our streamlined program enables you to jump-start your learning and certification in 4 simple steps.</p>
+    </div>
+
+    <% if (howItWorks && howItWorks.length > 0) { %>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem;">
+        <% howItWorks.forEach(function(step, idx) { %>
+          <div class="card-sharp" style="padding: 2rem; border: 2px solid #000; background-color: #fff; box-shadow: 4px 4px 0 #000; position: relative;">
+            <div style="position: absolute; top: -1.5rem; left: 2rem; width: 3rem; height: 3rem; border-radius: 50%; background-color: #000; color: #fff; display: flex; justify-content: center; align-items: center; font-size: 1.25rem; font-weight: 900; border: 2px solid #000;"><%= step.step || (idx + 1) %></div>
+            <div style="margin-top: 1rem;">
+              <h3 style="font-size: 1.2rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.75rem;"><%= step.title %></h3>
+              <p style="font-size: 0.85rem; color: #555; line-height: 1.6; margin: 0;"><%= step.description %></p>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <p style="text-align: center; font-style: italic; color: #555;">No steps configured.</p>
+    <% } %>
+  </div>
+</section>
+
+<%# ─── FAQ ───────────────────────────────────────────────────────── %>
+<section id="faq" class="section-padding" style="background-color: #fff; border-bottom: 2px solid #000; padding: 5rem 0;">
+  <div class="container" style="max-width: 800px;">
+    <div class="section-heading" style="text-align: center; margin-bottom: 4rem;">
+      <span class="badge-sharp" style="margin-bottom: 1rem;">COMMON QUESTIONS</span>
+      <h2 style="font-size: 2.5rem; font-weight: 900; text-transform: uppercase;">Frequently Asked Questions</h2>
+      <p style="color: #555; max-width: 600px; margin: 0.5rem auto 0;">Got questions? We have answers. If you need further support, please reach out.</p>
+    </div>
+
+    <% if (faqs && faqs.length > 0) { %>
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <% faqs.forEach(function(faq, idx) { %>
+          <div style="border: 2px solid #000; box-shadow: 4px 4px 0 #000; background-color: #fff;">
+            <button type="button" onclick="toggleFAQ(<%= idx %>)" style="width: 100%; padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; text-align: left; font: inherit; font-weight: 800; text-transform: uppercase; color: #000;">
+              <span><%= faq.question %></span>
+              <span class="faq-toggle" style="font-size: 1.25rem; display: inline-block;">+</span>
+            </button>
+            <div id="faq-<%= idx %>" class="faq-answer" style="max-height: 0; overflow: hidden; transition: max-height 0.25s ease-out; border-top: none; background-color: #fafafa;">
+              <div style="padding: 1.5rem; font-size: 0.9rem; line-height: 1.6; color: #555;"><%= faq.answer %></div>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <p style="text-align: center; font-style: italic; color: #555;">No FAQs configured yet.</p>
+    <% } %>
+  </div>
+</section>
+
+<%# ─── Earn Section ──────────────────────────────────────────────── %>
+<section id="earn" class="section-padding" style="background-color: #fafafa; border-bottom: 2px solid #000; padding: 5rem 0;">
+  <div class="container" style="max-width: 800px;">
+    <div class="section-heading" style="text-align: center; margin-bottom: 3rem;">
+      <span class="badge-sharp" style="margin-bottom: 1rem;">EARN PROGRAM</span>
+      <h2 style="font-size: 2.5rem; font-weight: 900; text-transform: uppercase;">Refer &amp; Earn Rewards</h2>
+      <p style="color: #555; max-width: 600px; margin: 0.5rem auto 0;">Share your referral link with friends and earn rewards when they enroll and complete their internship.</p>
+    </div>
+
+    <% if (user) { %>
+      <div class="card-sharp" style="padding: 2rem; border: 2px solid #000; background: #fff;">
+        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1rem;">Your Referral Dashboard</h3>
+        <p style="margin-bottom: 1.5rem;">View your referral code, track signups, and manage your earnings from the full referral dashboard.</p>
+        <a href="/dashboard?tab=referral" class="btn-sharp" style="text-decoration: none;">Open Referral Dashboard</a>
+      </div>
+    <% } else { %>
+      <div class="card-sharp" style="padding: 2rem; border: 2px solid #000; background: #fff; text-align: center;">
+        <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 1rem;">Want to Earn Rewards?</h3>
+        <p style="margin-bottom: 1.5rem;">Sign in with Google, create your referral code, and start earning rewards for every friend who joins and completes an internship.</p>
+        <a href="/auth" class="btn-sharp" style="text-decoration: none;">Sign In to Start Earning</a>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<script>
+function toggleFAQ(index) {
+  const answer = document.getElementById('faq-' + index);
+  const toggle = answer.previousElementSibling.querySelector('.faq-toggle');
+  if (answer.style.maxHeight === '0px' || answer.style.maxHeight === '') {
+    answer.style.maxHeight = '300px';
+    answer.style.borderTop = '2px solid #000';
+    toggle.textContent = '×';
+    toggle.style.transform = 'rotate(45deg)';
+  } else {
+    answer.style.maxHeight = '0';
+    answer.style.borderTop = 'none';
+    toggle.textContent = '+';
+    toggle.style.transform = 'none';
+  }
+}
+</script>
+
+<%- include('partials/footer') %>

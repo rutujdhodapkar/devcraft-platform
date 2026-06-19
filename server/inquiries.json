@@ -1,0 +1,31 @@
+[
+  {
+    "id": "INQ-1781371393487",
+    "createdAt": "2026-06-13T17:23:13.488Z",
+    "name": "Test Student",
+    "email": "student@test.com",
+    "projectType": "software",
+    "planTier": "advanced",
+    "customSpecs": [
+      "Cloud Deployment"
+    ],
+    "estimatedPrice": 425,
+    "currency": "USD",
+    "message": "Need final year diploma project completed."
+  },
+  {
+    "id": "INQ-1781372078101",
+    "createdAt": "2026-06-13T17:34:38.101Z",
+    "name": "Sample Student",
+    "email": "student2@univ.edu",
+    "projectType": "software",
+    "planTier": "basic",
+    "customSpecs": [
+      "SQLite DB",
+      "Basic Cloud Deployment"
+    ],
+    "estimatedPrice": 100,
+    "currency": "USD",
+    "message": "Simple Python and React app for a diploma class project."
+  }
+]

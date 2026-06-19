@@ -1,0 +1,14 @@
+[
+  {
+    "id": "VIS-1781374971124",
+    "referralCode": "TESTCODE",
+    "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",
+    "device": "Desktop",
+    "language": "en-US",
+    "link": "http://localhost:5173/?ref=TESTCODE",
+    "visitedAt": "2026-06-13T18:22:50.944Z",
+    "country": "Unknown",
+    "action": "visited",
+    "matched": false
+  }
+]

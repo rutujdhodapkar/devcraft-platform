@@ -1,0 +1,58 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<section style="min-height: 60vh; display: flex; justify-content: center; align-items: center; padding: 4rem 2rem; background: #fff;">
+  <div class="card-sharp" style="padding: 2.5rem; width: 100%; max-width: 550px; border: 2px solid #000;">
+    <h2 style="font-size: 1.6rem; font-weight: 900; margin-bottom: 0.5rem; text-transform: uppercase;">Verify Credential</h2>
+    <p style="color: #555; margin-bottom: 1.5rem;">Enter an Internship ID or Certificate ID to verify its authenticity.</p>
+
+    <form id="verifyForm" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+      <input type="text" id="verifyId" placeholder="Enter Intern ID (dev-craft-XXXXX) or Enrollment ID" required style="flex: 1; padding: 0.75rem 1rem; border: 2px solid #000; font-size: 0.9rem; font-family: inherit; outline: none;" />
+      <button type="submit" class="btn-sharp" style="padding: 0.75rem 1.5rem; white-space: nowrap;">Verify</button>
+    </form>
+
+    <div id="verifyError" style="display: none; color: #EA4335; font-weight: bold; font-size: 0.9rem; margin-bottom: 1rem; padding: 0.75rem; border: 2px solid #EA4335; background: #FFF5F5;"></div>
+    <div id="verifyResult" style="display: none; border: 2px dashed #bda068; padding: 1.25rem; background-color: #faf8f5; font-size: 0.9rem;"></div>
+  </div>
+</section>
+
+<script>
+document.getElementById('verifyForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const id = document.getElementById('verifyId').value.trim();
+  const errorEl = document.getElementById('verifyError');
+  const resultEl = document.getElementById('verifyResult');
+  errorEl.style.display = 'none';
+  resultEl.style.display = 'none';
+
+  if (!id) return;
+
+  try {
+    const res = await fetch('/api/enrollments');
+    const data = await res.json();
+    if (data.success && data.data) {
+      const enrollment = data.data.find(e => e.internId === id || e.id === id);
+      if (enrollment) {
+        resultEl.innerHTML = `
+          <span class="badge-sharp" style="background-color: #34A853; color: #fff; margin-bottom: 0.75rem; display: inline-block;">VERIFIED PROGRAM</span>
+          <div style="margin-bottom: 0.5rem;"><strong>Candidate Name:</strong> ${enrollment.name || ''}</div>
+          ${enrollment.internId ? `<div style="margin-bottom: 0.5rem;"><strong>Intern ID:</strong> <code>${enrollment.internId}</code></div>` : ''}
+          <div style="margin-bottom: 0.5rem;"><strong>Domain:</strong> ${enrollment.domain || ''}</div>
+          <div style="margin-bottom: 0.5rem;"><strong>Status:</strong> <span style="font-weight: bold; color: ${enrollment.status === 'Completed' ? '#34A853' : '#FBBC05'};">${enrollment.status || 'Active'}</span></div>
+          <div style="margin-bottom: 0.5rem;"><strong>Enrolled Date:</strong> ${enrollment.createdAt ? new Date(enrollment.createdAt).toLocaleDateString() : '-'}</div>
+          <div><strong>Institution:</strong> ${enrollment.college || '-'}</div>
+        `;
+        resultEl.style.display = 'block';
+      } else {
+        errorEl.textContent = 'No active internship or certificate found with this ID.';
+        errorEl.style.display = 'block';
+      }
+    }
+  } catch (err) {
+    errorEl.textContent = 'Error checking verification ID. Please try again.';
+    errorEl.style.display = 'block';
+  }
+});
+</script>
+
+<%- include('partials/footer') %>

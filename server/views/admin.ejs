@@ -1,0 +1,217 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<section class="admin-panel" style="background: #fbfbfb; min-height: 100vh; padding: 2rem 0;">
+  <div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+      <h2 style="font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; text-transform: uppercase;">Admin Panel</h2>
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <a href="/dashboard" class="btn-sharp-outline" style="text-decoration: none; font-size: 0.85rem;">Dashboard</a>
+        <a href="/" class="btn-sharp-outline" style="text-decoration: none; font-size: 0.85rem;">Home</a>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
+      <div class="card-sharp metric-card" style="padding: 1.5rem; text-align: center;"><span style="display: block; color: #555; text-transform: uppercase; font-size: 0.78rem; font-weight: 800;">Total Enrollments</span><strong style="display: block; font-size: 2rem; font-family: 'Space Grotesk', sans-serif;"><%= enrollments.length %></strong></div>
+      <div class="card-sharp metric-card" style="padding: 1.5rem; text-align: center;"><span style="display: block; color: #555; text-transform: uppercase; font-size: 0.78rem; font-weight: 800;">Active</span><strong style="display: block; font-size: 2rem; font-family: 'Space Grotesk', sans-serif;"><%= enrollments.filter(e => e.status === 'Active').length %></strong></div>
+      <div class="card-sharp metric-card" style="padding: 1.5rem; text-align: center;"><span style="display: block; color: #555; text-transform: uppercase; font-size: 0.78rem; font-weight: 800;">Completed</span><strong style="display: block; font-size: 2rem; font-family: 'Space Grotesk', sans-serif;"><%= enrollments.filter(e => e.status === 'Completed').length %></strong></div>
+      <div class="card-sharp metric-card" style="padding: 1.5rem; text-align: center;"><span style="display: block; color: #555; text-transform: uppercase; font-size: 0.78rem; font-weight: 800;">Referrals</span><strong style="display: block; font-size: 2rem; font-family: 'Space Grotesk', sans-serif;"><%= referrals.length %></strong></div>
+    </div>
+
+    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem; border-bottom: 2px solid #000; padding-bottom: 0.75rem;">
+      <button class="btn-sharp tab-btn active" data-tab="enrollments" onclick="switchTab('enrollments')" style="font-size: 0.85rem;">Enrollments</button>
+      <button class="btn-sharp-outline tab-btn" data-tab="referrals" onclick="switchTab('referrals')" style="font-size: 0.85rem;">Referrals</button>
+      <button class="btn-sharp-outline tab-btn" data-tab="admins" onclick="switchTab('admins')" style="font-size: 0.85rem;">Admins</button>
+      <button class="btn-sharp-outline tab-btn" data-tab="messages" onclick="switchTab('messages')" style="font-size: 0.85rem;">Messages</button>
+    </div>
+
+    <%# ─── Enrollments Tab ──────────────────────────────────────────── %>
+    <div id="tab-enrollments" class="admin-tab-content">
+      <div class="table-wrap" style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Domain</th><th>Intern ID</th><th>Status</th><th>Projects Done</th><th>Date</th><th>Actions</th></tr>
+          </thead>
+          <tbody>
+            <% enrollments.forEach(function(e) { %>
+              <% var projects = e.projects || []; var submissions = e.submissions || {}; var verifiedCount = projects.filter(function(_, i) { return submissions[i] && submissions[i].verified; }).length; %>
+              <tr>
+                <td><strong><%= e.name || e.email || '-' %></strong></td>
+                <td><%= e.domain || '-' %></td>
+                <td><code><%= e.internId || e.id %></code></td>
+                <td><span style="font-weight: bold; color: <%= e.status === 'Completed' ? '#34A853' : '#FBBC05' %>;"><%= e.status || 'Active' %></span></td>
+                <td><%= verifiedCount %>/<%= projects.length %></td>
+                <td><%= e.createdAt ? new Date(e.createdAt).toLocaleDateString() : '-' %></td>
+                <td>
+                  <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn-sharp-outline" style="font-size: 0.7rem; padding: 0.3rem 0.6rem;" onclick="toggleStatus('<%= e.id %>', '<%= e.status === 'Completed' ? 'Active' : 'Completed' %>')"><%= e.status === 'Completed' ? 'Reactivate' : 'Complete' %></button>
+                    <button class="btn-sharp-outline" style="font-size: 0.7rem; padding: 0.3rem 0.6rem; color: #EA4335; border-color: #EA4335;" onclick="deleteEnrollment('<%= e.id %>')">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            <% }); %>
+            <% if (!enrollments || enrollments.length === 0) { %>
+              <tr><td colspan="7" style="text-align: center; padding: 2rem; color: #888;">No enrollments yet.</td></tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <%# ─── Referrals Tab ────────────────────────────────────────────── %>
+    <div id="tab-referrals" class="admin-tab-content" style="display: none;">
+      <details style="margin-bottom: 2rem;">
+        <summary class="btn-sharp-outline" style="cursor: pointer; display: inline-block; padding: 0.5rem 1rem;">+ Create Referral Code</summary>
+        <div style="margin-top: 1rem; padding: 1.5rem; border: 2px solid #000; background: #fff;">
+          <form id="createReferralForm" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+            <input type="text" name="name" placeholder="Partner Name" required style="padding: 0.6rem; border: 2px solid #000; font-family: inherit;" />
+            <input type="email" name="email" placeholder="Email" required style="padding: 0.6rem; border: 2px solid #000; font-family: inherit;" />
+            <input type="text" name="phone" placeholder="Phone" style="padding: 0.6rem; border: 2px solid #000; font-family: inherit;" />
+            <input type="text" name="college" placeholder="College" style="padding: 0.6rem; border: 2px solid #000; font-family: inherit;" />
+            <button type="submit" class="btn-sharp" style="grid-column: 1 / -1; padding: 0.6rem;">Create Referral</button>
+          </form>
+        </div>
+      </details>
+
+      <div class="table-wrap" style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr><th>Code</th><th>Name</th><th>Visited</th><th>Logged In</th><th>Selected</th><th>Created</th><th>Actions</th></tr>
+          </thead>
+          <tbody>
+            <% referrals.forEach(function(r) { %>
+              <tr>
+                <td><code><%= r.code %></code></td>
+                <td><%= r.name || '-' %></td>
+                <td><%= r.visited || 0 %></td>
+                <td><%= r.loggedIn || 0 %></td>
+                <td><%= r.selected || 0 %></td>
+                <td><%= r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '-' %></td>
+                <td><button class="btn-sharp-outline" style="font-size: 0.7rem; padding: 0.3rem 0.6rem; color: #EA4335; border-color: #EA4335;" onclick="deleteReferral('<%= r.code %>')">Delete</button></td>
+              </tr>
+            <% }); %>
+            <% if (!referrals || referrals.length === 0) { %>
+              <tr><td colspan="7" style="text-align: center; padding: 2rem; color: #888;">No referrals yet.</td></tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <%# ─── Admins Tab ───────────────────────────────────────────────── %>
+    <div id="tab-admins" class="admin-tab-content" style="display: none;">
+      <div style="margin-bottom: 1.5rem;">
+        <form id="addAdminForm" style="display: flex; gap: 0.5rem; max-width: 400px;">
+          <input type="email" name="email" placeholder="admin@email.com" required style="flex: 1; padding: 0.6rem; border: 2px solid #000; font-family: inherit;" />
+          <button type="submit" class="btn-sharp">Add Admin</button>
+        </form>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Email</th><th>Actions</th></tr></thead>
+          <tbody id="adminsList"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <%# ─── Messages Tab ─────────────────────────────────────────────── %>
+    <div id="tab-messages" class="admin-tab-content" style="display: none;">
+      <div style="margin-bottom: 1.5rem;">
+        <form id="createMessageForm" style="display: flex; flex-direction: column; gap: 0.75rem; max-width: 500px;">
+          <select name="type" style="padding: 0.6rem; border: 2px solid #000; font-family: inherit;">
+            <option value="info">Info</option><option value="warning">Warning</option><option value="success">Success</option>
+          </select>
+          <input type="text" name="title" placeholder="Message Title" style="padding: 0.6rem; border: 2px solid #000; font-family: inherit;" />
+          <textarea name="text" placeholder="Message Content" required style="padding: 0.6rem; border: 2px solid #000; font-family: inherit; min-height: 80px;"></textarea>
+          <button type="submit" class="btn-sharp">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.admin-tab-content').forEach(function(el) { el.style.display = 'none'; });
+  document.getElementById('tab-' + tab).style.display = 'block';
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.className = btn.dataset.tab === tab ? 'btn-sharp tab-btn active' : 'btn-sharp-outline tab-btn';
+  });
+}
+
+function toggleStatus(id, status) {
+  fetch('/api/enrollments/' + id + '/status', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status })
+  }).then(function(r) { return r.json(); }).then(function(d) {
+    if (d.success) location.reload(); else alert('Failed to update status');
+  }).catch(function(e) { alert('Error: ' + e.message); });
+}
+
+function deleteEnrollment(id) {
+  if (!confirm('Delete this enrollment?')) return;
+  fetch('/api/enrollments/' + id, { method: 'DELETE' }).then(function(r) { return r.json(); }).then(function(d) {
+    if (d.success) location.reload(); else alert('Delete failed');
+  }).catch(function(e) { alert('Error: ' + e.message); });
+}
+
+function deleteReferral(code) {
+  if (!confirm('Delete referral ' + code + '?')) return;
+  fetch('/api/referrals/' + encodeURIComponent(code), { method: 'DELETE' }).then(function(r) { return r.json(); }).then(function(d) {
+    if (d.success) location.reload(); else alert('Delete failed');
+  }).catch(function(e) { alert('Error: ' + e.message); });
+}
+
+document.getElementById('createReferralForm')?.addEventListener('submit', function(e) {
+  e.preventDefault();
+  var data = {};
+  new FormData(this).forEach(function(v, k) { data[k] = v; });
+  fetch('/api/referrals', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+    .then(function(r) { return r.json(); }).then(function(d) {
+      if (d.success) { alert('Referral created: ' + d.data.code); location.reload(); }
+      else alert('Failed to create referral');
+    }).catch(function(e) { alert('Error: ' + e.message); });
+});
+
+document.getElementById('addAdminForm')?.addEventListener('submit', function(e) {
+  e.preventDefault();
+  var data = Object.fromEntries(new FormData(this));
+  fetch('/api/admins', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+    .then(function(r) { return r.json(); }).then(function(d) {
+      if (d.success) { alert('Admin added!'); loadAdmins(); }
+      else alert('Failed to add admin');
+    }).catch(function(e) { alert('Error: ' + e.message); });
+});
+
+document.getElementById('createMessageForm')?.addEventListener('submit', function(e) {
+  e.preventDefault();
+  var data = Object.fromEntries(new FormData(this));
+  data.context = 'all';
+  fetch('/api/admin-messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+    .then(function(r) { return r.json(); }).then(function(d) {
+      if (d.success) { alert('Message sent!'); this.reset(); }
+    }.bind(this)).catch(function(e) { alert('Error: ' + e.message); });
+});
+
+function loadAdmins() {
+  fetch('/api/admins').then(function(r) { return r.json(); }).then(function(d) {
+    if (!d.success || !d.data) return;
+    var html = '';
+    d.data.forEach(function(email) {
+      html += '<tr><td>' + email + '</td><td><button class="btn-sharp-outline" style="font-size: 0.7rem; padding: 0.3rem 0.6rem; color: #EA4335; border-color: #EA4335;" onclick="removeAdmin(\'' + encodeURIComponent(email) + '\')">Remove</button></td></tr>';
+    });
+    if (!html) html = '<tr><td colspan="2" style="text-align: center; padding: 2rem; color: #888;">No admins configured.</td></tr>';
+    document.getElementById('adminsList').innerHTML = html;
+  }).catch(function() {});
+}
+
+function removeAdmin(email) {
+  if (!confirm('Remove admin?')) return;
+  fetch('/api/admins/' + email, { method: 'DELETE' }).then(function(r) { return r.json(); }).then(function(d) {
+    if (d.success) loadAdmins();
+  }).catch(function(e) { alert('Error: ' + e.message); });
+}
+
+loadAdmins();
+</script>
+
+<%- include('partials/footer') %>

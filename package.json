@@ -2,6 +2,7 @@
   "name": "devcraft-platform",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "node server/index.js",
     "server": "node server/index.js",
